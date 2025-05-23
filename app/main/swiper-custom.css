@@ -1,0 +1,22 @@
+/* swiper-custom.css 등 원하는 위치에 추가 */
+.swiper-pagination {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px; /* 이 값을 통해 원하는 만큼 아래로! */
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+.swiper {
+  padding-bottom: 40px !important; /* 페이지네이션이 겹치지 않도록 바닥에 여유 주기 */
+}
+/* swiper-custom.css */
+.swiper-pagination-bullet {
+  background: #cbd5e1; /* Tailwind gray-300 */
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background: #3b82f6; /* Tㅈailwind blue-500 or 원하는 색 */
+}
