@@ -78,7 +78,7 @@ const SignupPage = () => {
         onKeyDown={handleKeyDown}
         className="mb-2.5 w-full rounded-[10px] border border-black p-2.5"
       />
-      <h5 className="mb-2">Password</h5>
+      <h5 className="mt-4 mb-2">Password</h5>
       <input
         type="password"
         value={password}

@@ -29,6 +29,7 @@ const LoginPage = () => {
 
     // 임시 유저 체크
     if (email === Temp_User.email && password === Temp_User.password) {
+      window.localStorage.setItem('isLoggedIn', 'true');
       router.push('/main');
     } else {
       setErrorMsg('이메일 또는 비밀번호가 일치하지 않습니다.');
@@ -90,7 +91,9 @@ const LoginPage = () => {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="font-jua w-full rounded bg-[#7FBFFF] py-2 text-xl text-white transition-colors hover:bg-[#5aa3e2] disabled:cursor-not-allowed disabled:bg-blue-200"
+          className="font-jua w-full rounded bg-[#7FBFFF] py-2 text-xl
+          text-white transition-colors hover:bg-[#5aa3e2]
+          disabled:cursor-not-allowed disabled:bg-blue-200"
         >
           {loading ? '로딩 중...' : '로그인'}
         </button>

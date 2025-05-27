@@ -20,3 +20,29 @@
 .swiper-pagination-bullet-active {
   background: #3b82f6; /* Tㅈailwind blue-500 or 원하는 색 */
 }
+
+/* swiper-custom.css */
+.swiper .swiper-pagination,
+.swiper .swiper-pagination-bullets,
+.swiper .swiper-pagination-bullets.swiper-pagination-horizontal,
+.swiper .swiper-pagination-bullet {
+  display: none !important;
+}
+
+/* swiper-custom.css - 이미 존재하는 컴포넌트에 맞춰 추가/수정 */
+.mt-4.flex.justify-center.swiper-pagination-bullet {
+  /* 점이 나타나는 영역 스타일 */
+  gap: 15px;
+}
+.mt-4.flex.justify-center .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 50%;
+  opacity: 1;
+  margin: 0 4px;
+  transition: background 0.3s;
+}
+.mt-4.flex.justify-center .swiper-pagination-bullet-active {
+  background: #3b82f6; /* 활성화된 점 별도 강조 */
+}
