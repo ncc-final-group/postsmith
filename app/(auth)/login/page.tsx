@@ -91,9 +91,8 @@ const LoginPage = () => {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="font-jua w-full rounded bg-[#7FBFFF] py-2 text-xl
-          text-white transition-colors hover:bg-[#5aa3e2]
-          disabled:cursor-not-allowed disabled:bg-blue-200"
+          className="font-jua w-full rounded bg-[#7FBFFF] py-2 text-xl text-white
+          transition-colors hover:bg-[#5aa3e2] disabled:cursor-not-allowed disabled:bg-blue-200"
         >
           {loading ? '로딩 중...' : '로그인'}
         </button>

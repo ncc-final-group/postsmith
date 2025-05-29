@@ -132,9 +132,7 @@ const HomePage = () => {
             <div className="mb-6 flex w-full flex-col items-center rounded-lg bg-white p-6 shadow">
               {/* 1. 프로필 사진 + 유저 정보 (좌우로) */}
               <div className="flex w-full items-center">
-                <Image src={userProfile.avatar} alt="프로필" width={64}
-                  height={64}
-                  className="h-16 w-16 rounded-full border object-cover" />
+                <Image src={userProfile.avatar} alt="프로필" width={64} height={64} className="h-16 w-16 rounded-full border object-cover" />
                 <div className="ml-4 flex flex-col justify-center">
                   <div className="text-lg font-bold">{userProfile.username}</div>
                   <div className="mt-1 text-xs text-gray-500">구독자 {userProfile.subscriber.toLocaleString()}명</div>
@@ -147,9 +145,13 @@ const HomePage = () => {
                   글쓰기
                 </Link>
                 <div className="w-px bg-gray-200" />
-                <button className="flex-1 py-2 text-sm transition hover:bg-gray-50 focus:bg-gray-50">내 블로그</button>
+                <Link href="/myblog" className="flex-1 py-2 text-center text-sm transition hover:bg-gray-50 focus:bg-gray-50">
+                  내 블로그
+                </Link>
                 <div className="w-px bg-gray-200" />
-                <button className="flex-1 py-2 text-sm transition hover:bg-gray-50 focus:bg-gray-50">관리</button>
+                <Link href="/usermanage" className="flex-1 py-2 text-center text-sm transition hover:bg-gray-50 focus:bg-gray-50">
+                  내 관리
+                </Link>
               </div>
 
               {/* 3. 조회수/방문자 (구분선, 한 줄씩) */}
