@@ -1,9 +1,8 @@
 'use client';
 
-import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 
 const Temp_User = {
   name: 'admin',
@@ -49,7 +48,7 @@ const LoginPage = () => {
     setLoading(false);
   }*/
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleLogin();
     }
@@ -91,17 +90,12 @@ const LoginPage = () => {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="font-jua w-full rounded bg-[#7FBFFF] py-2 text-xl text-white
-          transition-colors hover:bg-[#5aa3e2] disabled:cursor-not-allowed disabled:bg-blue-200"
+          className="font-jua w-full rounded bg-[#7FBFFF] py-2 text-xl text-white transition-colors hover:bg-[#5aa3e2] disabled:cursor-not-allowed disabled:bg-blue-200"
         >
           {loading ? '로딩 중...' : '로그인'}
         </button>
         {/* 오른쪽 아래 Sign Up 버튼 (absolute로 배치) */}
-        <button
-          onClick={handleSignUp}
-          className="absolute right-0 bottom-[-34px] px-1 text-xs text-[#298cff] underline hover:text-[#1058a8]"
-          type="button"
-        >
+        <button onClick={handleSignUp} className="absolute right-0 bottom-[-34px] px-1 text-xs text-[#298cff] underline hover:text-[#1058a8]" type="button">
           Sign Up
         </button>
       </div>

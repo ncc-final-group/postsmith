@@ -15,11 +15,7 @@ export default function QuickLinks() {
     <ul className="mt-1 w-full space-y-1">
       {quickMenu.map((item) => (
         <li key={item.label}>
-          <Link
-            href={item.href}
-            className="flex items-center gap-3 rounded-lg bg-white px-3 py-5 text-base font-medium
-            text-gray-700 shadow-sm transition hover:bg-gray-50"
-          >
+          <Link href={item.href} className="flex items-center gap-3 rounded-lg bg-white px-3 py-5 text-base font-medium text-gray-700 shadow-sm transition hover:bg-gray-50">
             <span className="text-xl">{item.icon}</span>
             <span>{item.label}</span>
           </Link>

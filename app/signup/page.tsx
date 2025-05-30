@@ -1,11 +1,10 @@
 'use client';
 
-import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const SignupPage = () => {
+export default function SignupPage() {
   const router = useRouter();
 
   const [name, setName] = useState('');
@@ -103,6 +102,4 @@ const SignupPage = () => {
       </div>
     </div>
   );
-};
-
-export default SignupPage;
+}

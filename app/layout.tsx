@@ -1,13 +1,11 @@
 import { Geist, Geist_Mono } from 'next/font/google';
+import { ReactNode } from 'react';
 
 import type { Metadata } from 'next';
 
+import Header from '@components/layouts/Header';
 import 'swiper/css/pagination';
 import './globals.css';
-import Header from '@components/Header';
-
-import { ReactNode } from 'react';
-import axios from 'axios';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
