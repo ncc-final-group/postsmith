@@ -27,8 +27,8 @@ export default function PostListPage() {
   });
 
   return (
-    <main className="flex min-h-screen flex-col items-center font-[Jua]">
-      <div className="flex w-full flex-col gap-4 px-6 py-8">
+    <main className="flex min-h-screen w-screen flex-col items-center overflow-hidden bg-white font-[Jua]">
+      <div className="flex w-[1024px] flex-col gap-4 px-6 py-8">
         <div className="text-center text-3xl font-bold text-gray-900">UserName의 블로그</div>
 
         <div className="mt-16 flex items-end justify-between">
@@ -48,9 +48,9 @@ export default function PostListPage() {
             {posts.map((post, index) => (
               <div key={index} className="flex w-full items-center gap-4 border-b border-gray-400 p-4">
                 <Image src={post.image} alt={post.title} width={160} height={160} />
-                <div className="flex max-w-3xl flex-col">
+                <div className="flex w-[768px] flex-col">
                   <div className="text-2xl font-bold">{post.title}</div>
-                  <div className="text-lg text-gray-500">content</div>
+                  <div className="text-lg text-gray-500">{post.content}</div>
                   <div className="mt-2 flex gap-2 text-sm text-gray-600">
                     <div>{post.date}</div>
                     <div>추천</div>

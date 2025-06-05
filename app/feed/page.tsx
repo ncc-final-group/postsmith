@@ -25,7 +25,7 @@ function RecommendedBlog({ userName, blogName, image }: BlogProps) {
 
 export default function FeedPage() {
   const image1 = '/defaultimage.png';
-  const RecommendedBlogs: BlogProps[] = Array(7).fill({
+  const RecommendedBlogs: BlogProps[] = Array(6).fill({
     id: '1',
     userName: '스미스 A',
     blogName: 'blogA',
@@ -33,7 +33,7 @@ export default function FeedPage() {
   });
 
   const FeedItem = () => (
-    <div className="flex max-w-[55rem] flex-row items-center gap-4 border-b border-gray-500 p-4">
+    <div className="flex max-w-[64rem] flex-row items-center gap-4 border-b border-gray-500 p-4">
       <Image src={image1} alt="" width={160} height={160} />
       <div className="flex max-w-[52.5rem] flex-col">
         <div className="h-10 text-2xl">Title</div>
@@ -57,18 +57,19 @@ export default function FeedPage() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center font-[Jua]">
-      <div className="flex h-[80vh] flex-col gap-4 p-8">
+    <main className="flex flex-col items-center p-12 font-[Jua]">
+      <div className="flex flex-col gap-4 p-8">
         <div className="text-2xl font-bold text-gray-900">피드</div>
-        <div className="flex min-w-[55rem] flex-col border-t-2 border-black">
+        <div className="flex h-[40rem] min-w-[64rem] flex-col overflow-y-auto border-t-2 border-black">
+          <FeedItem />
           <FeedItem />
           <FeedItem />
           <FeedItem />
         </div>
       </div>
-      <div className="w-full bg-gray-100 p-12">
+      <div className="m-16 w-full rounded-xl bg-gray-100 p-12">
         <div className="mb-4 text-lg">추천 블로그입니다. 팔로우 해보세요</div>
-        <div className="grid min-w-screen grid-cols-3 gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] gap-4">
           {RecommendedBlogs.map((blog, index) => (
             <RecommendedBlog key={index} {...blog} />
           ))}
