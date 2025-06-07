@@ -29,15 +29,22 @@ export default function PostListPage() {
   return (
     <main className="flex min-h-screen w-screen flex-col items-center overflow-hidden bg-white font-[Jua]">
       <div className="flex w-[1024px] flex-col gap-4 px-6 py-8">
-        <div className="text-center text-3xl font-bold text-gray-900">UserName의 블로그</div>
-
         <div className="mt-16 flex items-end justify-between">
-          <div className="text-xl text-gray-500">전체 3글</div>
+          <div className="flex flex-row gap-4 items-end">
+            <div className="text-center text-3xl font-bold text-gray-900">UserName의 블로그</div>
+            <div className="text-l text-gray-500">3글</div>
+          </div>
           <div className="flex gap-4">
-            <button onClick={() => setViewType('list')} className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-400">
+            <button onClick={() => setViewType('list')}
+              className={`flex h-8 w-8 items-center justify-center rounded-md border border-gray-400 ${
+                viewType === 'list' ? 'bg-gray-400 text-white' : 'bg-transparent'
+              }`}>
               L
             </button>
-            <button onClick={() => setViewType('grid')} className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-400">
+            <button onClick={() => setViewType('grid')}
+              className={`flex h-8 w-8 items-center justify-center rounded-md border border-gray-400 ${
+                viewType === 'grid' ? 'bg-gray-400 text-white' : 'bg-transparent'
+              }`}>
               G
             </button>
           </div>
@@ -46,7 +53,7 @@ export default function PostListPage() {
         {viewType === 'list' && (
           <div className="flex w-full flex-col items-center border-t-2 border-black">
             {posts.map((post, index) => (
-              <div key={index} className="flex w-full items-center gap-4 border-b border-gray-400 p-4">
+              <div key={index} className="flex w-full items-center gap-4 border-b border-gray-400 px-4">
                 <Image src={post.image} alt={post.title} width={160} height={160} />
                 <div className="flex w-[768px] flex-col">
                   <div className="text-2xl font-bold">{post.title}</div>
@@ -65,9 +72,9 @@ export default function PostListPage() {
         )}
 
         {viewType === 'grid' && (
-          <div className="grid w-full grid-cols-3 gap-4 border-t-2 border-black">
+          <div className="grid w-full grid-cols-3 border-t-2 border-black">
             {posts.map((post, index) => (
-              <div key={index} className="flex flex-col items-center gap-2 border-b border-gray-400 p-4">
+              <div key={index} className="flex flex-col items-center gap-2 p-4 transition-opacity duration-200 hover:bg-gray-400 hover:opacity-80 cursor-pointer">
                 <Image src={post.image} alt={post.title} width={160} height={160} />
                 <div className="text-xl font-semibold">{post.title}</div>
               </div>

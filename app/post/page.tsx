@@ -8,7 +8,6 @@ export default function PostPage() {
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-16 p-8 font-[Jua]">
-      {/* 본문 영역 */}
       <div className="flex w-full max-w-4xl flex-col gap-4">
         <div className="text-2xl text-gray-500">카테고리 없음</div>
         <div className="text-3xl font-bold">title</div>
@@ -34,12 +33,10 @@ export default function PostPage() {
         </div>
       </div>
 
-      {/* 댓글 영역 */}
       <div className="flex w-full max-w-4xl flex-col gap-4">
         <div className="text-2xl font-semibold">댓글 10</div>
         <hr className="h-px bg-gray-400" />
 
-        {/* 댓글 */}
         <div className="flex flex-col gap-2 p-4">
           <div className="flex items-end gap-4">
             <figure className="relative h-12 w-12 overflow-hidden rounded-full">
@@ -54,7 +51,6 @@ export default function PostPage() {
           </div>
         </div>
 
-        {/* 댓글 + 대댓글 */}
         <div className="flex flex-col gap-2 p-4">
           <div className="flex items-end gap-4">
             <figure className="relative h-12 w-12 overflow-hidden rounded-full">
@@ -68,7 +64,6 @@ export default function PostPage() {
             <button className="border-b border-black">답글</button>
           </div>
 
-          {/* 대댓글 영역 */}
           <div className="mx-16 flex flex-col gap-4 bg-gray-100 p-4">
             {[1, 2, 3].map((_, idx) => (
               <div key={idx} className="flex flex-col gap-2">
