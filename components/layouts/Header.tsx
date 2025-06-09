@@ -2,13 +2,17 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Header() {
   /*여기는 일단 임시 유저로 받음*/
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const pathname = usePathname(); // 현재 경로 확인
+
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
+
 
   useEffect(() => {
     // 처음 마운트될 때 localStorage에서 상태 읽기
@@ -27,15 +31,19 @@ export default function Header() {
     <header className="sticky top-0 z-10 min-h-[74px] w-full min-w-[1230px] border-b border-gray-200 bg-white px-4 py-1 shadow-sm">
       <div className="flex flex-shrink-0 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/main" className="flex items-center text-xl font-bold text-black">
+          <Link href="/" className="flex items-center text-xl font-bold text-black">
             <Image src="/logo.png" alt="Logo" width={144} height={74} className="mr-2 inline-block" />
           </Link>
 
-          <nav className="hidden gap-6 text-gray-700 md:flex">
-            <Link href="/main">홈</Link>
-            <Link href="/feed">피드</Link>
-            <Link href="/skin">스킨</Link>
-          </nav>
+          {/* 네비게이션은 로그인/회원가입 페이지에서는 보이지 않게 */}
+          {!isAuthPage && (
+            <nav className="hidden gap-6 text-gray-700 md:flex">
+              <Link href="/">홈</Link>
+              <Link href="/feed">피드</Link>
+              <Link href="/skin">스킨</Link>
+            </nav>
+          )}
+
         </div>
 
         {/* 오른쪽: 로그인 버튼 */}
