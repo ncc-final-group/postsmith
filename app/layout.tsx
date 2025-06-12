@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 
@@ -6,6 +7,7 @@ import type { Metadata } from 'next';
 import Header from '@components/layouts/Header';
 import 'swiper/css/pagination';
 import './globals.css';
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -21,12 +23,28 @@ export const metadata: Metadata = {
   description: '블로그 포스팅해주는 서비스입니다.',
 };
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true,
+      refetchIntervalInBackground: false,
+      refetchOnMount: 'always',
+      retryDelay: 2000,
+      refetchInterval: 10000,
+      staleTime: 5000,
+      enabled: true,
+    },
+  },
+});
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        {children}
+        <QueryClientProvider client={queryClient}>
+          <Header />
+          {children}
+        </QueryClientProvider>
       </body>
     </html>
   );

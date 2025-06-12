@@ -35,19 +35,7 @@ const LoginPage = () => {
     }
     setLoading(false);
   };
-
-  /*setLoading(true);
-  try {
-    const res = await axios.post('/api/login', { email, password });
-    if (res.status === 200) {
-      router.push('/dashboard');
-    }
-  } catch (err) {
-    setErrorMsg('로그인에 실패했습니다. 다시 시도해주세요.');
-  } finally {
-    setLoading(false);
-  }*/
-
+  
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleLogin();
