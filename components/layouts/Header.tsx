@@ -34,7 +34,7 @@ export default function Header() {
           <nav className="hidden gap-6 text-gray-700 md:flex">
             <Link href="/main">홈</Link>
             <Link href="/feed">피드</Link>
-            <Link href="/skin">스킨</Link>
+            <Link href="/skin">테마</Link>
           </nav>
         </div>
 
