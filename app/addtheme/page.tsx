@@ -1,18 +1,50 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+interface Tag {
+  id: string;
+  type: string;
+  name: string;
+}
+
+function useTags() {
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/tags')
+      .then((res) => {
+        if (!res.ok) throw new Error('Fetch error');
+        return res.json();
+      })
+      .then(setTags)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { tags, loading, error };
+}
+
+function TagsCard({ tag, isSelected, onToggle }: { tag: Tag; isSelected: boolean; onToggle: (tagName: string) => void }) {
+  return (
+    <button
+      className={`cursor-pointer rounded-md border-none px-3 py-1 text-sm ${isSelected ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'}`}
+      onClick={() => onToggle(tag.name)}
+    >
+      #{tag.name}
+    </button>
+  );
+}
 
 export default function AddThemePage() {
-  const tags = ['반응형', '블로그형', '사이트', '커뮤니티', '매거진', '미니멀'];
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [themeName, setThemeName] = useState('');
+  const { tags, loading, error } = useTags();
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prevTags) => (prevTags.includes(tag) ? prevTags.filter((t) => t !== tag) : [...prevTags, tag]));
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 16) {
@@ -35,17 +67,64 @@ export default function AddThemePage() {
     }
   };
 
-  const image1 = '/image1.png';
-  const title = 'Skin\n나만의 테마을 만들어보세요.';
+  const toggleTag = (tagName: string) => {
+    setSelectedTag((prev) => (prev === tagName ? null : tagName));
+  };
+
+  async function postTheme() {
+    if (!themeName) {
+      alert('테마명을 입력하세요.');
+      return;
+    }
+    if (!selectedImage) {
+      alert('대표 이미지를 선택하세요.');
+      return;
+    }
+    if (!selectedTag) {
+      alert('태그를 선택하세요.');
+      return;
+    }
+
+    const themePayload = {
+      name: themeName,
+      cover_image: selectedImage,
+      image: selectedImage,
+      description: '설명',
+      author: '제작자',
+      author_link: 'authorLink',
+      html: 'htmlContent',
+      css: 'cssContent',
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/api/themes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(themePayload),
+      });
+
+      if (!response.ok) {
+        throw new Error('테마 등록 실패');
+      }
+
+      alert('테마가 성공적으로 등록되었습니다!');
+
+      setThemeName('');
+      setSelectedTag(null);
+      setSelectedImage(null);
+    } catch (err) {
+      alert((err as Error).message);
+    }
+  }
 
   return (
     <main className="min-h-screen font-[Jua]">
       <div className="mx-auto flex h-[80vh] min-w-[80rem] flex-col gap-8">
         <div className="flex min-h-[16rem] items-end justify-center bg-blue-300/50 text-4xl font-bold whitespace-pre-line text-white">
           <figure className="relative h-40 w-56">
-            <Image src={image1} alt="img" fill className="object-contain" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+            <Image src={'/image1.png'} alt="img" fill className="object-contain" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
           </figure>
-          <div>{title}</div>
+          <div>Skin{'\n'}나만의 테마을 만들어보세요.</div>
         </div>
 
         <div className="flex max-w-[55rem] flex-col self-center border-2 border-gray-500">
@@ -64,17 +143,17 @@ export default function AddThemePage() {
             <div className="w-40 text-xl">태그</div>
             <div className="flex flex-col gap-2">
               <div className="text-sm text-gray-500">내 테마과 맞는 태그를 선택해주세요.</div>
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag, index) => (
-                  <button
-                    key={index}
-                    className={`cursor-pointer rounded-md border-none px-3 py-1 text-sm ${selectedTags.includes(tag) ? 'text-blue-600' : 'text-gray-500 hover:text-blue-600'}`}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    #{tag}
-                  </button>
-                ))}
-              </div>
+
+              {loading && <div className="text-sm text-gray-400">태그 로딩 중...</div>}
+              {error && <div className="text-sm text-red-400">태그 로딩 실패</div>}
+
+              {!loading && !error && (
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <TagsCard key={tag.id} tag={tag} isSelected={selectedTag === tag.name} onToggle={toggleTag} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -99,9 +178,10 @@ export default function AddThemePage() {
           </div>
         </div>
 
-        <div className="flex gap-4 self-center">
-          <button className="h-12 w-30 rounded-md border-2 border-gray-500 text-sm font-bold hover:bg-gray-200">취소</button>
-          <button className="h-12 w-30 rounded-md border-2 border-gray-500 text-sm font-bold hover:bg-gray-200">저장</button>
+        <div className="flex justify-center">
+          <button onClick={postTheme} className="h-12 w-30 rounded-md border-2 border-gray-500 text-sm font-bold hover:bg-gray-200">
+            저장
+          </button>
         </div>
 
         <div className="mt-16 border-t-2 border-gray-300 pt-8 pl-12 text-sm text-gray-500">
