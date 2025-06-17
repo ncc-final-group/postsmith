@@ -38,7 +38,7 @@ function useRecommendedBlogs() {
 
   const fetchFeedContents = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/contents/userId/2');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/contents/userId/2`);
       if (!res.ok) throw new Error('Feed fetch error');
       const data: FeedContent[] = await res.json();
       setFeedContents(Array.isArray(data) ? data : []);
@@ -49,7 +49,7 @@ function useRecommendedBlogs() {
 
   const fetchRecommendedBlogs = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/blogs/recommendedBlogs/userId/2');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/blogs/recommendedBlogs/userId/2`);
       if (!res.ok) throw new Error('Recommended blogs fetch error');
       const data: Blog[] = await res.json();
       setRecommendedBlogs(Array.isArray(data) ? data : []);
@@ -114,7 +114,7 @@ function FeedContentsCard({ content, blog }: { content: Content; blog: Blog }) {
 function RecommendedBlogsCard({ recommendedBlog, onSubscribed }: { recommendedBlog: Blog; onSubscribed: () => void }) {
   const handleSubscribe = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/blogs/subscription/subscriberId/2/blogId/${recommendedBlog.id}`, { method: 'PUT' });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/blogs/subscription/subscriberId/2/blogId/${recommendedBlog.id}`, { method: 'PUT' });
       if (!response.ok) throw new Error('Failed to subscribe');
       alert(`"${recommendedBlog.nickname}" 블로그를 구독했습니다!`);
       onSubscribed();

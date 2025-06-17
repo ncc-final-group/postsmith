@@ -33,7 +33,7 @@ function useThemes() {
 
   const fetchThemeTags = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/themes/a');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/themes/a`);
       if (!res.ok) throw new Error('Feed fetch error');
       const data: ThemeTag[] = await res.json();
       setThemeTags(Array.isArray(data) ? data : []);

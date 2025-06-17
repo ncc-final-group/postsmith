@@ -15,7 +15,7 @@ function useTags() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/tags')
+    fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/tags`)
       .then((res) => {
         if (!res.ok) throw new Error('Fetch error');
         return res.json();
@@ -97,7 +97,7 @@ export default function AddThemePage() {
     };
 
     try {
-      const response = await fetch('http://localhost:8080/api/themes', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/themes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(themePayload),
