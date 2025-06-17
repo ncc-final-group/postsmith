@@ -6,35 +6,59 @@ import React, { useEffect, useState } from 'react';
 interface Theme {
   id: number;
   name: string;
-  cover_image: string;
+  coverImage: string;
   image: string;
   description: string;
   author: string;
-  author_link: string;
+  authorLink: string;
   theme: string;
   tag: string;
 }
 
+interface Tag {
+  id: number;
+  type: string;
+  name: string;
+}
+
+interface ThemeTag {
+  theme: Theme;
+  tag: Tag;
+}
+
 function useThemes() {
-  const [themes, setThemes] = useState<Theme[]>([]);
+  const [themeTags, setThemeTags] = useState<ThemeTag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  const fetchThemeTags = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/themes/a`);
+      if (!res.ok) throw new Error('Feed fetch error');
+      const data: ThemeTag[] = await res.json();
+      setThemeTags(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError(err as Error);
+    }
+  };
+
   useEffect(() => {
-    fetch('http://localhost:8080/api/themes')
-      .then((res) => {
-        if (!res.ok) throw new Error('Fetch error');
-        return res.json();
-      })
-      .then(setThemes)
-      .catch(setError)
-      .finally(() => setLoading(false));
+    const fetchAll = async () => {
+      setLoading(true);
+      await Promise.all([fetchThemeTags()]);
+      setLoading(false);
+    };
+    fetchAll();
   }, []);
 
-  return { themes, loading, error };
+  return {
+    themeTags,
+    loading,
+    error,
+  };
 }
 
-function ThemeCard({ theme }: { theme: Theme }) {
+function ThemeCard({ theme, tag }: { theme: Theme; tag: Tag }) {
   return (
     <div className="group flex h-[480px] w-[320px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="relative flex h-[20rem] w-full items-center justify-center bg-gray-600 p-6 text-white">
@@ -47,7 +71,7 @@ function ThemeCard({ theme }: { theme: Theme }) {
           <div className="max-h-24 overflow-y-auto text-sm">{theme.description || '설명 없음'}</div>
           <div className="text-xs">
             제작자:{' '}
-            <a href={theme.author_link} target="_blank" rel="noopener noreferrer" className="underline">
+            <a href={theme.authorLink} target="_blank" rel="noopener noreferrer" className="underline">
               {theme.author}
             </a>
           </div>
@@ -56,7 +80,7 @@ function ThemeCard({ theme }: { theme: Theme }) {
 
       <div className="flex grow flex-col items-center justify-center gap-3 p-4">
         <div className="text-xl font-bold text-black">{theme.name}</div>
-        <div className="text-sm text-blue-600">#{theme.theme}</div>
+        <div className="text-sm text-blue-600">#{tag.name}</div>
         <div className="flex gap-2">
           <button className="w-28 rounded-md border border-gray-500 px-3 py-1.5 text-xs font-bold hover:bg-gray-200">작품 예시보기</button>
           <button className="w-28 rounded-md border border-gray-500 px-3 py-1.5 text-xs font-bold hover:bg-gray-200">적용</button>
@@ -66,22 +90,22 @@ function ThemeCard({ theme }: { theme: Theme }) {
   );
 }
 
-function TagFilter({ tags, selectedTag, onSelect }: { tags: string[]; selectedTag: string | null; onSelect: (tag: string | null) => void }) {
+function TagFilter({ tags, selectedTag, onSelect }: { tags: Tag[]; selectedTag: string | null; onSelect: (tag: string | null) => void }) {
   return (
-    <div className="mb-8 flex gap-3 overflow-x-auto whitespace-nowrap">
+    <div className="mb-4 flex overflow-x-auto whitespace-nowrap">
       <button
         onClick={() => onSelect(null)}
-        className={`max-w-[120px] truncate rounded-md px-3 py-1 text-sm ${selectedTag === null ? 'text-blue-700' : 'text-gray-600 hover:text-blue-600'}`}
+        className={`max-w-[120px] truncate rounded-md px-2 text-sm ${selectedTag === null ? 'text-blue-700' : 'text-gray-600 hover:text-blue-600'}`}
       >
         #전체보기
       </button>
       {tags.map((tag, index) => (
         <button
           key={index}
-          onClick={() => onSelect(tag)}
-          className={`max-w-[120px] truncate rounded-md px-3 py-1 text-sm ${selectedTag === tag ? 'text-blue-700' : 'text-gray-600 hover:text-blue-600'}`}
+          onClick={() => onSelect(tag.name)}
+          className={`max-w-[120px] truncate rounded-md px-2 text-sm ${selectedTag === tag.name ? 'text-blue-700' : 'text-gray-600 hover:text-blue-600'}`}
         >
-          #{tag}
+          #{tag.name}
         </button>
       ))}
     </div>
@@ -89,23 +113,26 @@ function TagFilter({ tags, selectedTag, onSelect }: { tags: string[]; selectedTa
 }
 
 export default function ThemePage() {
-  const { themes, loading, error } = useThemes();
+  const { themeTags, loading, error } = useThemes();
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
 
-  const filteredThemes = selectedTag ? themes.filter((t) => t.theme === selectedTag) : themes;
+  const filteredThemes = selectedTag ? themeTags.filter((t) => t.tag.name === selectedTag) : themeTags;
 
   const minGridItems = 9;
   const emptyCount = Math.max(0, minGridItems - filteredThemes.length);
 
-  const uniqueTags = Array.from(new Set(themes.map((t) => t.theme)));
+  const uniqueTags = Array.from(new Map(themeTags.map((t) => [t.tag.id, t.tag])).values());
+
   return (
-    <main className="mx-auto min-h-screen max-w-[1024px] px-6 py-8">
-      <div className="mb-6 text-2xl font-bold">티스토리 테마</div>
+    <main className="mx-auto min-h-screen max-w-[1080px] px-6 py-8">
+      <div className="mb-4 text-2xl font-bold">티스토리 테마</div>
 
       <TagFilter tags={uniqueTags} selectedTag={selectedTag} onSelect={setSelectedTag} />
+
+      <div className="mb-8 h-px w-full bg-gray-300" />
 
       <div
         className="grid gap-6"
@@ -115,8 +142,8 @@ export default function ThemePage() {
           justifyContent: 'center',
         }}
       >
-        {filteredThemes.map((theme) => (
-          <ThemeCard key={theme.id} theme={theme} />
+        {filteredThemes.map((themeTags) => (
+          <ThemeCard key={themeTags.theme.id} theme={themeTags.theme} tag={themeTags.tag} />
         ))}
         {[...Array(emptyCount)].map((_, idx) => (
           <div key={idx} className="invisible h-[480px] w-[320px]" />
