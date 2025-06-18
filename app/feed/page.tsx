@@ -8,7 +8,7 @@ interface Blog {
   name: string;
   nickname: string;
   description: string;
-  logo_image: string;
+  logoImage: string;
 }
 
 interface Content {
@@ -38,7 +38,7 @@ function useRecommendedBlogs() {
 
   const fetchFeedContents = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/contents/userId/2`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/feedContents/userId/2`);
       if (!res.ok) throw new Error('Feed fetch error');
       const data: FeedContent[] = await res.json();
       setFeedContents(Array.isArray(data) ? data : []);
@@ -100,12 +100,12 @@ function FeedContentsCard({ content, blog }: { content: Content; blog: Blog }) {
           <div className="text-blue-400">{content.likes}</div>
         </div>
       </div>
-      <div className="mt-4 flex flex-col items-center gap-2 self-end">
+      <div className="mt-4 flex w-16 flex-col items-center gap-2 self-end">
         <figure className="relative h-16 w-16 overflow-hidden rounded-full border border-gray-500">
-          <Image src="/defaultimage.png" alt={blog.name} fill sizes="64px" className="object-contain" />
+          <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="profile" />
         </figure>
-        <div className="text-sm">{blog.name}</div>
-        <div className="text-sm text-gray-500">{blog.nickname}</div>
+        <div className="overflow-hidden text-sm">{blog.name}</div>
+        <div className="overflow-hidden text-sm whitespace-nowrap text-gray-500">{blog.nickname}</div>
       </div>
     </div>
   );
@@ -126,13 +126,13 @@ function RecommendedBlogsCard({ recommendedBlog, onSubscribed }: { recommendedBl
   return (
     <div className="flex max-w-sm flex-col items-center gap-3 rounded-xl bg-white p-6 shadow">
       <figure className="relative h-24 w-24 overflow-hidden rounded-full border border-gray-500">
-        <Image src={recommendedBlog.logo_image || '/defaultimage.png'} alt={recommendedBlog.nickname} fill sizes="96px" className="object-contain" />
+        <Image fill style={{ objectFit: 'contain' }} priority src={recommendedBlog.logoImage || '/defaultimage.png'} alt="profile" />
       </figure>
       <div className="text-lg font-semibold">{recommendedBlog.nickname}</div>
       <div className="text-center text-sm text-gray-600">{recommendedBlog.description}</div>
       <div className="text-xs text-gray-400">{recommendedBlog.name}</div>
       <button onClick={handleSubscribe} className="mt-2 h-8 w-24 rounded-md border border-gray-500 bg-white hover:bg-gray-100">
-        팔로우
+        구독
       </button>
     </div>
   );
@@ -158,7 +158,7 @@ export default function FeedPage() {
   return (
     <main className="flex flex-col items-center">
       <div className="flex w-full max-w-7xl flex-col gap-4 p-4 sm:p-8">
-        <div className="text-2xl font-bold text-gray-900">피드</div>
+        <h2 className="text-2xl font-bold text-gray-900">피드</h2>
         <div className="flex w-full flex-col border-t-2 border-black">
           {pagedFeedContents.map(({ content, blog }, idx) =>
             content && content.id ? (
@@ -189,7 +189,7 @@ export default function FeedPage() {
       </div>
 
       <div className="m-8 w-full max-w-7xl overflow-hidden rounded-xl bg-gray-100 p-6 sm:p-12">
-        <div className="mb-6 text-lg">추천 블로그입니다. 팔로우 해보세요</div>
+        <h3 className="mb-6 text-lg">추천 블로그입니다. 구독해보세요</h3>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {recommendedBlogs.slice(0, 8).map((blog) => (
             <RecommendedBlogsCard key={blog.id} recommendedBlog={blog} onSubscribed={handleSubscribed} />
