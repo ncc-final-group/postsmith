@@ -3,7 +3,10 @@ import { ReactNode } from 'react';
 
 import type { Metadata } from 'next';
 
+import QueryProvider from '@app/query-provider';
+import Footer from '@components/layouts/Footer';
 import Header from '@components/layouts/Header';
+
 import 'swiper/css/pagination';
 import './globals.css';
 
@@ -23,10 +26,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={geistSans.className}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        {children}
+        <QueryProvider>
+          <Header />
+          {children}
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );
