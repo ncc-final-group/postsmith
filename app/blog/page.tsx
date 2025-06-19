@@ -181,91 +181,89 @@ const PostSmiths: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto min-h-screen max-w-[1080px] px-6 py-8">
-      <div className="max-w-6xl">
-        <div className="mt-auto flex flex-col items-start gap-4 border border-gray-300 bg-white p-4">
-          <div className="flex w-full flex-row items-center justify-between">
-            <h1 className="text-xl text-gray-800">운영 중인 블로그</h1>
-            <button onClick={handleCreateNew} className="text-xl text-gray-800">
-              +
-            </button>
-          </div>
-          <div className="flex w-full flex-col items-center">
-            {blogs.length === 0 ? (
-              <div className="mt-4 flex self-start text-base text-gray-500">운영중인 블로그가 없습니다. 블로그를 만들어 보세요.</div>
-            ) : (
-              blogs.map((blog, index) => {
-                const isSelected = blog === selectedBlog && !isCreating;
-                return (
-                  <div
-                    key={index}
-                    onClick={() => handleSelectBlog(blog)}
-                    className={`flex w-full cursor-pointer items-center gap-4 rounded-md p-2 transition ${isSelected ? 'bg-gray-100' : ''}`}
-                  >
-                    <figure className="relative h-20 w-20 rounded-full bg-gray-200">
-                      <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="logo" />
-                    </figure>
-                    <div className="flex gap-4">
-                      <div className="flex w-[40rem] flex-col justify-center">
-                        <div className="text-base font-medium">{blog.nickname}</div>
-                        <div className="text-base font-medium">{blog.address}</div>
+    <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-4 px-4 py-8">
+      <div className="flex min-h-screen flex-col gap-4">
+        <div className="max-w-6xl">
+          <div className="mt-auto flex flex-col items-start gap-4 border border-gray-300 bg-white p-4">
+            <div className="flex w-full flex-row items-center justify-between">
+              <h1 className="text-xl text-gray-800">운영 중인 블로그</h1>
+              <button onClick={handleCreateNew} className="text-xl text-gray-800">
+                +
+              </button>
+            </div>
+            <div className="flex w-full flex-col items-center">
+              {blogs.length === 0 ? (
+                <div className="mt-4 flex self-start text-base text-gray-500">운영중인 블로그가 없습니다. 블로그를 만들어 보세요.</div>
+              ) : (
+                blogs.map((blog, index) => {
+                  const isSelected = blog === selectedBlog && !isCreating;
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => handleSelectBlog(blog)}
+                      className={`flex w-full cursor-pointer items-center gap-4 rounded-md p-2 transition ${isSelected ? 'bg-gray-100' : ''}`}
+                    >
+                      <figure className="relative h-20 w-20 rounded-full bg-gray-200">
+                        <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="logo" />
+                      </figure>
+                      <div className="flex gap-4">
+                        <div className="flex w-[40rem] flex-col justify-center">
+                          <div className="text-base font-medium">{blog.nickname}</div>
+                          <div className="text-base font-medium">{blog.address}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-6xl pt-1">
-        <div className="flex flex-col items-start gap-8 border border-gray-300 bg-white p-4">
-          <h1 className="text-xl text-gray-800">{isCreating || blogs.length === 0 ? '새 블로그 만들기' : '블로그 관리'}</h1>
-          <label className="relative h-64 w-64 cursor-pointer self-center overflow-hidden rounded-full bg-gray-200">
-            <Image
-              fill
-              style={{ objectFit: 'contain' }}
-              priority
-              src={fileData.logoImage ? URL.createObjectURL(fileData.logoImage) : formData.logoImage || '/defaultimage.png'}
-              alt="logo"
-            />
-            <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-          </label>
+        <div className="max-w-6xl pt-1">
+          <div className="flex flex-col items-start gap-8 border border-gray-300 bg-white p-4">
+            <h1 className="text-xl text-gray-800">{isCreating || blogs.length === 0 ? '새 블로그 만들기' : '블로그 관리'}</h1>
+            <label className="relative h-64 w-64 cursor-pointer self-center overflow-hidden rounded-full bg-gray-200">
+              <Image
+                fill
+                style={{ objectFit: 'contain' }}
+                priority
+                src={fileData.logoImage ? URL.createObjectURL(fileData.logoImage) : formData.logoImage || '/defaultimage.png'}
+                alt="logo"
+              />
+              <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+            </label>
 
-          <div className="flex w-full flex-col gap-4">
-            {(['name', 'nickname', 'description'] as const).map((field) => (
-              <div key={field} className="flex w-full flex-col gap-2 px-8">
-                <label className="text-base">{`블로그 ${field === 'name' ? '이름' : field === 'nickname' ? '닉네임' : '설명'}`}</label>
-                <input
-                  name={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  placeholder={field === 'name' ? '블로그 이름을 입력하세요' : field === 'nickname' ? '블로그 닉네임을 입력하세요' : '블로그에 대한 설명을 입력하세요'}
-                  className="w-full rounded-md border border-gray-500 p-2 focus:ring-0 focus:outline-none"
-                />
-              </div>
-            ))}
+            <div className="flex w-full flex-col gap-4">
+              {(['name', 'nickname', 'description'] as const).map((field) => (
+                <div key={field} className="flex w-full flex-col gap-2 px-8">
+                  <label className="text-base">{`블로그 ${field === 'name' ? '이름' : field === 'nickname' ? '닉네임' : '설명'}`}</label>
+                  <input
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    placeholder={field === 'name' ? '블로그 이름을 입력하세요' : field === 'nickname' ? '블로그 닉네임을 입력하세요' : '블로그에 대한 설명을 입력하세요'}
+                    className="w-full rounded-md border border-gray-500 p-2 focus:ring-0 focus:outline-none"
+                  />
+                </div>
+              ))}
 
-            {(isCreating || blogs.length === 0) && (
-              <div className="flex w-full flex-col gap-2 px-8">
-                <label className="text-base">블로그 주소</label>
-                <input
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="예: www.postsmith.com"
-                  className="w-full rounded-md border border-gray-500 p-2 focus:ring-0 focus:outline-none"
-                />
-              </div>
-            )}
+              {(isCreating || blogs.length === 0) && (
+                <div className="flex w-full flex-col gap-2 px-8">
+                  <label className="text-base">블로그 주소</label>
+                  <input
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="예: www.postsmith.com"
+                    className="w-full rounded-md border border-gray-500 p-2 focus:ring-0 focus:outline-none"
+                  />
+                </div>
+              )}
+            </div>
           </div>
-
-          <div className="flex w-full justify-center gap-2">
-            <button
-              onClick={handleSaveChanges}
-              className="rounded-md border border-gray-500 px-6 py-2 text-base font-semibold text-gray-700 hover:border-gray-600 hover:text-gray-900"
-            >
+          <div className="flex justify-end gap-4 border border-gray-300 bg-gray-200 px-12 py-4">
+            <button onClick={handleSaveChanges} className="rounded-md border border-gray-500 px-8 py-1">
               변경사항 저장
             </button>
           </div>

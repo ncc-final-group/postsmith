@@ -85,19 +85,12 @@ function FeedContentsCard({ content, blog }: { content: Content; blog: Blog }) {
       </figure>
       <div className="flex w-full flex-col gap-2">
         <div className="text-xl font-bold">{content.title}</div>
-        <div className="line-clamp-2 h-[48px] overflow-hidden break-all text-gray-500">
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-        </div>
+        <div className="line-clamp-2 h-[48px] overflow-hidden break-all text-gray-500">{content.contentPlain}</div>
         <div className="mt-2 flex flex-row gap-2 text-sm text-gray-600">
-          <div>{content.createdAt}</div>
-          <div>· 추천</div>
+          <div>추천</div>
           <div className="text-blue-400">{content.likes}</div>
+          <div>·</div>
+          <div>{content.createdAt.replace('T', ' ')}</div>
         </div>
       </div>
       <div className="mt-4 flex w-16 flex-col items-center gap-2 self-end">
@@ -156,7 +149,7 @@ export default function FeedPage() {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <main className="flex flex-col items-center">
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="flex w-full max-w-7xl flex-col gap-4 p-4 sm:p-8">
         <h2 className="text-2xl font-bold text-gray-900">피드</h2>
         <div className="flex w-full flex-col border-t-2 border-black">
@@ -196,6 +189,6 @@ export default function FeedPage() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
