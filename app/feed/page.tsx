@@ -84,15 +84,19 @@ function FeedContentsCard({ content, blog }: { content: Content; blog: Blog }) {
   const html = content.contentHtml || '';
   const thumbNailImg = (() => {
     const match = html.match(/<img[^>]+src=["']([^"']+)["']/);
-    return match ? match[1] : '/defaultimage.png';
+    return match ? match[1] : '';
   })();
 
   return (
     <Link href={`http://${blog.address}.postsmith/blog/${content.sequence}`} className="w-full">
       <div className="flex w-full cursor-pointer flex-col items-center gap-4 border-b border-gray-500 p-4 transition hover:bg-gray-100 sm:flex-row">
-        <figure className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl border border-gray-300">
-          <Image src={`${thumbNailImg}`} alt={content.title} fill sizes="160px" className="object-cover" />
-        </figure>
+        <div className="mt-4 flex w-32 flex-col items-center gap-2 self-end">
+          <figure className="relative h-20 w-20 overflow-hidden rounded-full border border-gray-500">
+            <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="profile" />
+          </figure>
+          <div className="max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap">{blog.name}</div>
+          <div className="max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap text-gray-500">{blog.nickname}</div>
+        </div>
         <div className="flex w-full flex-col gap-2">
           <div className="text-xl font-bold">{content.title}</div>
           <div className="line-clamp-2 h-[48px] overflow-hidden break-all text-gray-500">{content.contentPlain}</div>
@@ -103,13 +107,11 @@ function FeedContentsCard({ content, blog }: { content: Content; blog: Blog }) {
             <div>{content.createdAt.replace('T', ' ')}</div>
           </div>
         </div>
-        <div className="mt-4 flex w-32 flex-col items-center gap-2 self-end">
-          <figure className="relative h-20 w-20 overflow-hidden rounded-full border border-gray-500">
-            <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="profile" />
+        {thumbNailImg && (
+          <figure className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl border border-gray-300">
+            <Image src={thumbNailImg} alt={content.title} fill sizes="160px" className="object-cover" />
           </figure>
-          <div className="max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap">{blog.name}</div>
-          <div className="max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap text-gray-500">{blog.nickname}</div>
-        </div>
+        )}
       </div>
     </Link>
   );
