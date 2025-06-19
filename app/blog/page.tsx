@@ -14,6 +14,19 @@ const PostSmiths: React.FC = () => {
     address: '',
     logoImage: '',
   });
+
+  const [fileData, setFileData] = useState<{
+    altText: string;
+    userId: number;
+    blogId: number;
+    logoImage: File | null;
+  }>({
+    altText: '',
+    userId: 1,
+    blogId: 1,
+    logoImage: null,
+  });
+
   const [isCreating, setIsCreating] = useState(false);
 
   const fetchBlogs = () => {
@@ -78,13 +91,41 @@ const PostSmiths: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('altText', '블로그 로고 이미지');
+    formData.append('userId', String(5));
+    formData.append('blogId', String(selectedBlog?.id ?? 0));
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/upload/image`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!res.ok) throw new Error('이미지 업로드 실패');
+      const data = await res.json();
+      return data.url;
+    } catch (error) {
+      alert('이미지 업로드에 실패했습니다.');
+      return null;
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        logoImage: URL.createObjectURL(file),
-      }));
+      const uploadedUrl = await uploadImage(file);
+      if (uploadedUrl) {
+        setFormData((prev) => ({
+          ...prev,
+          logoImage: uploadedUrl,
+        }));
+        setFileData((prev) => ({
+          ...prev,
+          logoImage: file,
+        }));
+      }
     }
   };
 
@@ -218,22 +259,14 @@ const PostSmiths: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
 
-        <div className="flex justify-end gap-4 border border-gray-300 bg-gray-200 px-12 py-4">
-          <button onClick={handleSaveChanges} className="rounded-md border border-gray-500 px-8 py-1">
-            {isCreating || blogs.length === 0 ? '블로그 만들기' : '변경사항 저장'}
-          </button>
-        </div>
-      </div>
-
-      {/* 블로그 현황 */}
-      <div className="flex w-full flex-col items-start gap-4 border border-gray-300 bg-white p-4">
-        <h1 className="text-xl text-gray-800">운영 · 개설 현황</h1>
-        <div className="flex w-full flex-col gap-2">
-          <div className="flex w-full justify-between">
-            <div className="w-[40rem] text-base">{5 - blogs.length}개의 블로그를 더 운영할 수 있습니다.</div>
-            <div className="w-36 text-right text-gray-500">운영 중인 블로그 {blogs.length}개</div>
+          <div className="flex w-full justify-center gap-2">
+            <button
+              onClick={handleSaveChanges}
+              className="rounded-md border border-gray-500 px-6 py-2 text-base font-semibold text-gray-700 hover:border-gray-600 hover:text-gray-900"
+            >
+              변경사항 저장
+            </button>
           </div>
         </div>
       </div>
