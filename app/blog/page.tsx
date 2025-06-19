@@ -73,6 +73,7 @@ const PostSmiths: React.FC = () => {
   const handleSelectBlog = (blog: any) => {
     setSelectedBlog(blog);
     setIsCreating(false);
+    setFileData({ logoImage: null });
   };
 
   const handleCreateNew = () => {
@@ -183,7 +184,7 @@ const PostSmiths: React.FC = () => {
   return (
     <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-4 px-4 py-8">
       <div className="flex min-h-screen flex-col gap-4">
-        <div className="max-w-6xl">
+        <div className="min-w-6xl">
           <div className="mt-auto flex flex-col items-start gap-4 border border-gray-300 bg-white p-4">
             <div className="flex w-full flex-row items-center justify-between">
               <h1 className="text-xl text-gray-800">운영 중인 블로그</h1>
@@ -203,15 +204,44 @@ const PostSmiths: React.FC = () => {
                       onClick={() => handleSelectBlog(blog)}
                       className={`flex w-full cursor-pointer items-center gap-4 rounded-md p-2 transition ${isSelected ? 'bg-gray-100' : ''}`}
                     >
-                      <figure className="relative h-20 w-20 rounded-full bg-gray-200">
+                      <figure className="relative min-h-20 min-w-20 overflow-hidden rounded-full bg-gray-200">
                         <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="logo" />
                       </figure>
-                      <div className="flex gap-4">
-                        <div className="flex w-[40rem] flex-col justify-center">
+                      <div className="flex w-full gap-4">
+                        <div className="flex w-120 flex-col justify-center">
                           <div className="text-base font-medium">{blog.nickname}</div>
                           <div className="text-base font-medium">{blog.address}</div>
                         </div>
                       </div>
+
+                      {isSelected && (
+                        <div className="flex flex-row">
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (process.env.NEXT_PUBLIC_HOME_URL) {
+                                window.open(`http://${blog.address}.postsmith/blog`, '_blank');
+                              }
+                            }}
+                            className="mr-4"
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <Image src="/home.svg" alt="설정 아이콘" width={36} height={36} />
+                          </div>
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (process.env.NEXT_PUBLIC_HOME_URL) {
+                                window.open(`http://${blog.address}.postsmith/usermanage`, '_blank');
+                              }
+                            }}
+                            className="mr-4"
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <Image src="/setting.svg" alt="설정 아이콘" width={36} height={36} />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })
@@ -220,7 +250,7 @@ const PostSmiths: React.FC = () => {
           </div>
         </div>
 
-        <div className="max-w-6xl pt-1">
+        <div className="min-w-6xl pt-1">
           <div className="flex flex-col items-start gap-8 border border-gray-300 bg-white p-4">
             <h1 className="text-xl text-gray-800">{isCreating || blogs.length === 0 ? '새 블로그 만들기' : '블로그 관리'}</h1>
             <label className="relative h-64 w-64 cursor-pointer self-center overflow-hidden rounded-full bg-gray-200">
