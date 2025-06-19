@@ -41,7 +41,7 @@ spec:
             steps {
                 script {
                     env.STAGE_SEQUENCE = 0
-                    env.IMAGE_NAME = 'postsmith-hub.kr.ncr.ntruss.com/postsmith-blog'
+                    env.IMAGE_NAME = 'postsmith-hub.kr.ncr.ntruss.com/postsmith'
                     env.IMAGE_TAG = build.getProjectVersion('nodejs')
                     withCredentials([file(credentialsId: 'postsmith_env', variable: 'APPLICATION_ENV')]) {
                         sh 'cp -f ${APPLICATION_ENV} ./.env'
