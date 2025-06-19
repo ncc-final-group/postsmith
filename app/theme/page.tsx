@@ -162,27 +162,26 @@ export default function ThemePage() {
     <main className="mx-auto min-h-screen max-w-[1080px] px-6 py-8">
       <div className="mb-4 text-2xl font-bold">포스트스미스 테마</div>
 
-        <TagFilter tags={uniqueTags} selectedTag={selectedTag} onSelect={setSelectedTag} />
+      <TagFilter tags={uniqueTags} selectedTag={selectedTag} onSelect={setSelectedTag} />
 
-        <div className="mb-8 h-px w-full bg-gray-300" />
+      <div className="mb-8 h-px w-full bg-gray-300" />
 
-        <div
-          className="grid gap-6"
-          style={{
-            gridTemplateColumns: 'repeat(3, 400px)',
-            gridAutoRows: '480px',
-            justifyContent: 'center',
-          }}
-        >
-          {filteredThemes.map((themeTags) => (
-            <ThemeCard key={themeTags.theme.id} theme={themeTags.theme} tag={themeTags.tag} onApply={handleApplyTheme} />
-          ))}
-          {[...Array(emptyCount)].map((_, idx) => (
-            <div key={idx} className="invisible h-[480px] w-[320px]" />
-          ))}
-          {filteredThemes.length === 0 && <p className="text-center text-gray-500">선택한 태그에 해당하는 테마가 없습니다.</p>}
-        </div>
+      <div
+        className="grid gap-6"
+        style={{
+          gridTemplateColumns: 'repeat(3, 400px)',
+          gridAutoRows: '480px',
+          justifyContent: 'center',
+        }}
+      >
+        {filteredThemes.map((themeTags) => (
+          <ThemeCard key={themeTags.theme.id} theme={themeTags.theme} tag={themeTags.tag} onApply={handleApplyTheme} />
+        ))}
+        {[...Array(emptyCount)].map((_, idx) => (
+          <div key={idx} className="invisible h-[480px] w-[320px]" />
+        ))}
+        {filteredThemes.length === 0 && <p className="text-center text-gray-500">선택한 태그에 해당하는 테마가 없습니다.</p>}
       </div>
-    </div>
+    </main>
   );
 }
