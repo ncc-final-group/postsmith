@@ -1,13 +1,17 @@
 'use client';
 
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const PostSmiths: React.FC = () => {
+  const params = useParams();
+  const userId = params?.userId;
+
   const [blogs, setBlogs] = useState<any[]>([]);
   const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
   const [formData, setFormData] = useState({
-    userId: 5,
+    userId: String(userId ?? ''),
     name: '',
     nickname: '',
     description: '',
@@ -15,14 +19,11 @@ const PostSmiths: React.FC = () => {
     logoImage: '',
   });
 
-  const [fileData, setFileData] = useState<{
-    logoImage: File | null;
-  }>({ logoImage: null });
-
+  const [fileData, setFileData] = useState<{ logoImage: File | null }>({ logoImage: null });
   const [isCreating, setIsCreating] = useState(false);
 
   const fetchBlogs = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/blogmanage/userId/5`)
+    fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/blogmanage/userId/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
@@ -59,7 +60,7 @@ const PostSmiths: React.FC = () => {
       setFileData({ logoImage: null });
     } else if (isCreating) {
       setFormData({
-        userId: 5,
+        userId: String(userId ?? ''),
         name: '',
         nickname: '',
         description: '',
@@ -73,7 +74,6 @@ const PostSmiths: React.FC = () => {
   const handleSelectBlog = (blog: any) => {
     setSelectedBlog(blog);
     setIsCreating(false);
-    setFileData({ logoImage: null });
   };
 
   const handleCreateNew = () => {
@@ -90,7 +90,7 @@ const PostSmiths: React.FC = () => {
     const form = new FormData();
     form.append('file', file);
     form.append('altText', '블로그 로고 이미지');
-    form.append('userId', String(5));
+    form.append('userId', String(userId));
     form.append('blogId', String(selectedBlog?.id ?? 0));
 
     try {
@@ -285,7 +285,7 @@ const PostSmiths: React.FC = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    placeholder="예: www.postsmith.com"
+                    placeholder="예: www.postsmith.com -> postsmith 입력"
                     className="w-full rounded-md border border-gray-500 p-2 focus:ring-0 focus:outline-none"
                   />
                 </div>
