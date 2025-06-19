@@ -128,7 +128,7 @@ export default function ThemePage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-[1080px] px-6 py-8">
-      <div className="mb-4 text-2xl font-bold">티스토리 테마</div>
+      <div className="mb-4 text-2xl font-bold">포스트스미스 테마</div>
 
       <TagFilter tags={uniqueTags} selectedTag={selectedTag} onSelect={setSelectedTag} />
 
