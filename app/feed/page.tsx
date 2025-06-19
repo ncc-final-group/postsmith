@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 interface Blog {
@@ -9,6 +10,7 @@ interface Blog {
   nickname: string;
   description: string;
   logoImage: string;
+  address: string;
 }
 
 interface Content {
@@ -23,6 +25,7 @@ interface Content {
   createdAt: string;
   name: string;
   nickname: string;
+  contentHtml: string;
 }
 
 interface FeedContent {
@@ -78,36 +81,39 @@ function useRecommendedBlogs() {
 }
 
 function FeedContentsCard({ content, blog }: { content: Content; blog: Blog }) {
+  const html = content.contentHtml || '';
+  const thumbNailImg = (() => {
+    const match = html.match(/<img[^>]+src=["']([^"']+)["']/);
+    return match ? match[1] : '';
+  })();
+
   return (
-    <div className="flex w-full flex-col items-center gap-4 border-b border-gray-500 p-4 sm:flex-row">
-      <figure className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl border border-gray-300">
-        <Image src="/defaultimage.png" alt={content.title} fill sizes="160px" className="object-cover" />
-      </figure>
-      <div className="flex w-full flex-col gap-2">
-        <div className="text-xl font-bold">{content.title}</div>
-        <div className="line-clamp-2 h-[48px] overflow-hidden break-all text-gray-500">
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
-          {content.contentPlain}
+    <Link href={`http://${blog.address}.postsmith/blog/${content.sequence}`} className="w-full">
+      <div className="flex w-full cursor-pointer flex-col items-center gap-4 border-b border-gray-500 p-4 transition hover:bg-gray-100 sm:flex-row">
+        <div className="mt-4 flex w-32 flex-col items-center gap-2 self-end">
+          <figure className="relative h-20 w-20 overflow-hidden rounded-full border border-gray-500">
+            <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="profile" />
+          </figure>
+          <div className="max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap">{blog.name}</div>
+          <div className="max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap text-gray-500">{blog.nickname}</div>
         </div>
-        <div className="mt-2 flex flex-row gap-2 text-sm text-gray-600">
-          <div>{content.createdAt}</div>
-          <div>· 추천</div>
-          <div className="text-blue-400">{content.likes}</div>
+        <div className="flex w-full flex-col gap-2">
+          <div className="text-xl font-bold">{content.title}</div>
+          <div className="line-clamp-2 h-[48px] overflow-hidden break-all text-gray-500">{content.contentPlain}</div>
+          <div className="mt-2 flex flex-row gap-2 text-sm text-gray-600">
+            <div>추천</div>
+            <div className="text-blue-400">{content.likes}</div>
+            <div>·</div>
+            <div>{content.createdAt.replace('T', ' ')}</div>
+          </div>
         </div>
+        {thumbNailImg && (
+          <figure className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-xl border border-gray-300">
+            <Image src={thumbNailImg} alt={content.title} fill sizes="160px" className="object-cover" />
+          </figure>
+        )}
       </div>
-      <div className="mt-4 flex w-16 flex-col items-center gap-2 self-end">
-        <figure className="relative h-16 w-16 overflow-hidden rounded-full border border-gray-500">
-          <Image fill style={{ objectFit: 'contain' }} priority src={blog.logoImage || '/defaultimage.png'} alt="profile" />
-        </figure>
-        <div className="overflow-hidden text-sm">{blog.name}</div>
-        <div className="overflow-hidden text-sm whitespace-nowrap text-gray-500">{blog.nickname}</div>
-      </div>
-    </div>
+    </Link>
   );
 }
 
@@ -156,7 +162,7 @@ export default function FeedPage() {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <main className="flex flex-col items-center">
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="flex w-full max-w-7xl flex-col gap-4 p-4 sm:p-8">
         <h2 className="text-2xl font-bold text-gray-900">피드</h2>
         <div className="flex w-full flex-col border-t-2 border-black">
@@ -196,6 +202,6 @@ export default function FeedPage() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
