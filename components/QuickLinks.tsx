@@ -1,7 +1,7 @@
 // QuickLinks.tsx
+import clsx from 'clsx';
 import Link from 'next/link';
 import { SiCanva, SiFigma, SiNotion, SiOpenai, SiRemovedotbg, SiUnsplash } from 'react-icons/si';
-import clsx from 'clsx';
 
 const quickMenu = [
   {
@@ -67,7 +67,7 @@ export default function QuickLinks() {
               'flex transform flex-col items-start gap-2 rounded-lg px-4 py-4 shadow-sm',
               'transition duration-200 ease-in-out hover:-translate-y-1 hover:shadow-md',
               item.bgColor,
-              item.textColor
+              item.textColor,
             )}
           >
             <div className="flex items-center gap-3">
