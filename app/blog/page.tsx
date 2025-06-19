@@ -16,16 +16,8 @@ const PostSmiths: React.FC = () => {
   });
 
   const [fileData, setFileData] = useState<{
-    altText: string;
-    userId: number;
-    blogId: number;
     logoImage: File | null;
-  }>({
-    altText: '',
-    userId: 1,
-    blogId: 1,
-    logoImage: null,
-  });
+  }>({ logoImage: null });
 
   const [isCreating, setIsCreating] = useState(false);
 
@@ -64,6 +56,7 @@ const PostSmiths: React.FC = () => {
         address: selectedBlog.address ?? '',
         logoImage: selectedBlog.logoImage ?? '',
       });
+      setFileData({ logoImage: null });
     } else if (isCreating) {
       setFormData({
         userId: 5,
@@ -73,6 +66,7 @@ const PostSmiths: React.FC = () => {
         address: '',
         logoImage: '',
       });
+      setFileData({ logoImage: null });
     }
   }, [selectedBlog, isCreating]);
 
@@ -92,16 +86,16 @@ const PostSmiths: React.FC = () => {
   };
 
   const uploadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('altText', '블로그 로고 이미지');
-    formData.append('userId', String(5));
-    formData.append('blogId', String(selectedBlog?.id ?? 0));
+    const form = new FormData();
+    form.append('file', file);
+    form.append('altText', '블로그 로고 이미지');
+    form.append('userId', String(5));
+    form.append('blogId', String(selectedBlog?.id ?? 0));
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER}/api/upload/image`, {
         method: 'POST',
-        body: formData,
+        body: form,
       });
       if (!res.ok) throw new Error('이미지 업로드 실패');
       const data = await res.json();
@@ -112,25 +106,26 @@ const PostSmiths: React.FC = () => {
     }
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const uploadedUrl = await uploadImage(file);
-      if (uploadedUrl) {
-        setFormData((prev) => ({
-          ...prev,
-          logoImage: uploadedUrl,
-        }));
-        setFileData((prev) => ({
-          ...prev,
-          logoImage: file,
-        }));
-      }
+      setFileData({ logoImage: file });
     }
   };
 
-  const handleSaveChanges = () => {
-    const logoImageToSave = formData.logoImage === '' ? '/defaultimage.png' : formData.logoImage;
+  const handleSaveChanges = async () => {
+    let finalLogoImage = formData.logoImage;
+
+    if (fileData.logoImage) {
+      const uploadedUrl = await uploadImage(fileData.logoImage);
+      if (uploadedUrl) {
+        finalLogoImage = uploadedUrl;
+      } else {
+        return;
+      }
+    }
+
+    const logoImageToSave = finalLogoImage || '/defaultimage.png';
 
     if (isCreating) {
       const dataToSend = { ...formData, logoImage: logoImageToSave };
@@ -228,7 +223,13 @@ const PostSmiths: React.FC = () => {
         <div className="flex flex-col items-start gap-8 border border-gray-300 bg-white p-4">
           <h1 className="text-xl text-gray-800">{isCreating || blogs.length === 0 ? '새 블로그 만들기' : '블로그 관리'}</h1>
           <label className="relative h-64 w-64 cursor-pointer self-center overflow-hidden rounded-full bg-gray-200">
-            <Image fill style={{ objectFit: 'contain' }} priority src={formData.logoImage || '/defaultimage.png'} alt="logo" />
+            <Image
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+              src={fileData.logoImage ? URL.createObjectURL(fileData.logoImage) : formData.logoImage || '/defaultimage.png'}
+              alt="logo"
+            />
             <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
           </label>
 
