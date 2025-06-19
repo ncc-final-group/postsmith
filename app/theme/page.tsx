@@ -159,29 +159,31 @@ export default function ThemePage() {
   const uniqueTags = Array.from(new Map(themeTags.map((t) => [t.tag.id, t.tag])).values());
 
   return (
-    <main className="mx-auto min-h-screen max-w-[1080px] px-6 py-8">
-      <div className="mb-4 text-2xl font-bold">포스트스미스 테마</div>
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 py-8">
+        <div className="mb-4 text-2xl font-bold">티스토리 테마</div>
 
-      <TagFilter tags={uniqueTags} selectedTag={selectedTag} onSelect={setSelectedTag} />
+        <TagFilter tags={uniqueTags} selectedTag={selectedTag} onSelect={setSelectedTag} />
 
-      <div className="mb-8 h-px w-full bg-gray-300" />
+        <div className="mb-8 h-px w-full bg-gray-300" />
 
-      <div
-        className="grid gap-6"
-        style={{
-          gridTemplateColumns: 'repeat(3, 400px)',
-          gridAutoRows: '480px',
-          justifyContent: 'center',
-        }}
-      >
-        {filteredThemes.map((themeTags) => (
-          <ThemeCard key={themeTags.theme.id} theme={themeTags.theme} tag={themeTags.tag} onApply={handleApplyTheme} />
-        ))}
-        {[...Array(emptyCount)].map((_, idx) => (
-          <div key={idx} className="invisible h-[480px] w-[320px]" />
-        ))}
-        {filteredThemes.length === 0 && <p className="text-center text-gray-500">선택한 태그에 해당하는 테마가 없습니다.</p>}
+        <div
+          className="grid gap-6"
+          style={{
+            gridTemplateColumns: 'repeat(3, 400px)',
+            gridAutoRows: '480px',
+            justifyContent: 'center',
+          }}
+        >
+          {filteredThemes.map((themeTags) => (
+            <ThemeCard key={themeTags.theme.id} theme={themeTags.theme} tag={themeTags.tag} onApply={handleApplyTheme} />
+          ))}
+          {[...Array(emptyCount)].map((_, idx) => (
+            <div key={idx} className="invisible h-[480px] w-[320px]" />
+          ))}
+          {filteredThemes.length === 0 && <p className="text-center text-gray-500">선택한 태그에 해당하는 테마가 없습니다.</p>}
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
