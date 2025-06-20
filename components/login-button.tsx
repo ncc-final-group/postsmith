@@ -5,19 +5,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { IUserSession } from '@components/layouts/Header';
+import { IUserInfo } from '@components/layouts/Header';
 import queryFunction from '@lib/query-function';
-
-interface LoginButtonProps {
-  sessionData?: IUserSession;
-}
 
 interface LogoutResponse {
   message?: string;
   success: boolean;
 }
 
-export default function LoginButton({ sessionData }: LoginButtonProps) {
+export default function LoginButton({ sessionData }: { sessionData?: IUserInfo }) {
   const { postAxios } = queryFunction<LogoutResponse>('/logout');
   const useLogout = useMutation({ mutationFn: () => postAxios({}) });
   const isLoggedIn = sessionData !== undefined ? true : false;
