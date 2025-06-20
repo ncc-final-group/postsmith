@@ -1,8 +1,8 @@
 'use server';
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
-import redisClient from "@lib/redis-client";
+import redisClient from '@lib/redis-client';
 
 export interface IUserSession {
   accessToken?: string;
