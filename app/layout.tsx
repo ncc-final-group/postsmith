@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import QueryProvider from '@app/query-provider';
 import Footer from '@components/layouts/Footer';
 import Header from '@components/layouts/Header';
+import getUserSession from '@lib/session-utils';
 
 import 'swiper/css/pagination';
 import './globals.css';
@@ -24,12 +25,14 @@ export const metadata: Metadata = {
   description: '블로그 포스팅해주는 서비스입니다.',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const sessionData = await getUserSession();
+
   return (
     <html lang="ko" className={geistSans.className}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
-          <Header />
+          <Header props={sessionData} />
           {children}
           <Footer />
         </QueryProvider>

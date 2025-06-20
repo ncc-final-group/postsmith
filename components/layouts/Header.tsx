@@ -1,30 +1,35 @@
-import { cookies } from 'next/headers';
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 import LoginButton from '@components/login-button';
-import redisClient from '@lib/redis-client';
+import { IUserSession } from '@lib/session-utils';
 
-export interface IUserSession {
-  accessToken?: string;
-  userId?: string;
-  email?: string;
-  role?: string;
-  userNickname?: string;
-  profileImage?: string;
+export interface IUserInfo {
+  accessToken: string;
+  userId: string;
+  email: string;
+  role: string;
+  userNickname: string;
+  profileImage: string;
 }
 
-async function serverAction() {
-  'use server';
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get('CLIENT_SESSION_ID');
-  const sessionData = await redisClient.get(sessionId?.value || '');
-  const sessionObject = JSON.parse(sessionData || '{}') as IUserSession;
-  return Object.keys(sessionObject).length > 0 ? sessionObject : undefined;
-}
+export default function Header({ props }: { props: IUserSession | undefined }) {
+  const userInfo = useMemo<IUserInfo | undefined>(() => {
+    if (props) {
+      return {
+        accessToken: props.accessToken ? props.accessToken : '',
+        userId: props.userId ? props.userId : '',
+        email: props.email ? props.email : '',
+        role: props.role ? props.role : '',
+        userNickname: props.userNickname ? props.userNickname : '',
+        profileImage: props.profileImage ? props.profileImage : '',
+      };
+    }
+  }, [props]);
 
-export default async function Header() {
-  const props = await serverAction();
   return (
     <header className="sticky top-0 z-10 min-h-[74px] w-full min-w-[1230px] border-b border-gray-200 bg-white px-4 py-1 shadow-sm">
       <div className="flex flex-shrink-0 items-center justify-between">
@@ -39,7 +44,7 @@ export default async function Header() {
           </nav>
         </div>
         <div>
-          <LoginButton sessionData={props} />
+          <LoginButton sessionData={userInfo} />
         </div>
       </div>
     </header>
