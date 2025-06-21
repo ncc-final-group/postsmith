@@ -151,12 +151,12 @@ export default function ThemePage() {
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
 
-  const filteredThemes = selectedTag ? themeTags.filter((t) => t.tag.name === selectedTag) : themeTags;
+  const filteredThemes = (selectedTag ? themeTags.filter((t) => t.tag.name === selectedTag) : themeTags).filter((t) => t.theme && typeof t.theme.id !== 'undefined');
 
   const minGridItems = 9;
   const emptyCount = Math.max(0, minGridItems - filteredThemes.length);
 
-  const uniqueTags = Array.from(new Map(themeTags.map((t) => [t.tag.id, t.tag])).values());
+  const uniqueTags = Array.from(new Map(themeTags.filter((t) => t.tag && typeof t.tag.id !== 'undefined').map((t) => [t.tag.id, t.tag])).values());
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
@@ -175,11 +175,11 @@ export default function ThemePage() {
             justifyContent: 'center',
           }}
         >
-          {filteredThemes.map((themeTags) => (
-            <ThemeCard key={themeTags.theme.id} theme={themeTags.theme} tag={themeTags.tag} onApply={handleApplyTheme} />
+          {filteredThemes.map((themeTag) => (
+            <ThemeCard key={themeTag.theme.id} theme={themeTag.theme} tag={themeTag.tag} onApply={handleApplyTheme} />
           ))}
           {[...Array(emptyCount)].map((_, idx) => (
-            <div key={idx} className="invisible h-[480px] w-[320px]" />
+            <div key={`empty-${idx}`} className="invisible h-[480px] w-[320px]" />
           ))}
           {filteredThemes.length === 0 && <p className="text-center text-gray-500">선택한 태그에 해당하는 테마가 없습니다.</p>}
         </div>
