@@ -131,7 +131,7 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       whileHover={{ scale: 1.05 }}
                       className="relative min-w-[280px] cursor-pointer rounded-xl via-white to-yellow-50 transition-transform dark:from-zinc-700 dark:via-zinc-800 dark:to-zinc-700"
                     >
-                      <a href={`https://${post.blogAddress}.postsmith.kro.kr/${post.sequence}`} target="_blank" rel="noopener noreferrer" className="block">
+                      <a href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/${post.sequence}`} target="_blank" rel="noopener noreferrer" className="block">
                         <figure className="relative h-40 rounded-xl border border-gray-300">
                           <Image src={imageUrl} alt={post.title} fill className="mb-2 w-full rounded-md object-cover" />
                         </figure>
@@ -161,7 +161,7 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       whileHover={{ scale: 1.02 }}
                       className="mb-4 flex items-start justify-between gap-4 rounded-xl bg-zinc-50 p-4 shadow-sm transition hover:shadow-md dark:bg-zinc-700"
                     >
-                      <a href={`https://${post.blogAddress}.postsmith.kro.kr/${post.sequence}`} target="_blank" rel="noopener noreferrer" className="flex gap-4">
+                      <a href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/${post.sequence}`} target="_blank" rel="noopener noreferrer" className="flex gap-4">
                         <Image src={imageUrl} alt={post.title} width={80} height={80} className="h-20 w-20 rounded-md object-cover" />
                         <div className="flex-1">
                           <div className="mb-1 text-base font-semibold text-gray-900 dark:text-gray-200">{post.title}</div>
@@ -186,9 +186,9 @@ export default function ClientRoot({ props }: ClientRootProps) {
                 <>
                   {/* 유저 프로필 정보 */}
                   <div className="flex min-h-[100px] items-center gap-4">
-                    <Link href={`/blog/${props.userId} postsmith.kro.kr`}>
+                    <Link href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/blog/${props.userId}`}>
                       <Image
-                        src={props.profileImage || '/defaultImage.png'}
+                        src={props.profileImage || '/defaultimage.png'}
                         alt="프로필"
                         width={64}
                         height={64}
@@ -206,13 +206,19 @@ export default function ClientRoot({ props }: ClientRootProps) {
                     <>
                       {/* 블로그가 있는 경우: 버튼 + 통계 */}
                       <div className="mt-4 grid grid-cols-3 divide-x divide-gray-200 overflow-hidden rounded-xl border text-sm dark:divide-gray-600">
-                        <Link href="/edit postsmith.kro.kr" className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700">
+                        <Link href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/edit`} className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700">
                           글쓰기
                         </Link>
-                        <Link href={`/blog/${props.userId} postsmith.kro.kr`} className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700">
+                        <Link
+                          href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/blog/${props.userId}`}
+                          className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700"
+                        >
                           내 블로그
                         </Link>
-                        <Link href="/usermanage postsmith.kro.kr" className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700">
+                        <Link
+                          href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/usermanage`}
+                          className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700"
+                        >
                           내 관리
                         </Link>
                       </div>
@@ -234,7 +240,10 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       {/* 블로그 없는 경우: 안내문 + 생성 버튼 */}
                       <div className="mt-6 text-center text-sm font-medium text-red-500">블로그가 존재하지 않습니다. 블로그를 생성해주세요.</div>
                       <div className="mt-4 flex justify-center">
-                        <Link href={`/blog/${props.userId} postsmith.kro.kr`} className="rounded-full bg-yellow-500 px-6 py-2 text-white shadow transition hover:bg-yellow-600">
+                        <Link
+                          href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_HOME_URL}/blog/${props.userId}`}
+                          className="rounded-full bg-yellow-500 px-6 py-2 text-white shadow transition hover:bg-yellow-600"
+                        >
                           블로그 생성하러 가기
                         </Link>
                       </div>
