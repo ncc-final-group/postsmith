@@ -27,7 +27,6 @@ interface Post {
   contentHtml?: string; // 이미지가 없을 때 대체로 쓸 내용
   createdAt: string;
   blogAddress: string;
-  type: string;
   myBlogAddress: string;
   sequence: number;
 }
@@ -133,7 +132,7 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       className="relative min-w-[280px] cursor-pointer rounded-xl via-white to-yellow-50 transition-transform dark:from-zinc-700 dark:via-zinc-800 dark:to-zinc-700"
                     >
                       <a
-                        href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/${post.type}/${post.sequence}`}
+                        href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/posts/${post.sequence}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block"
@@ -168,7 +167,7 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       className="mb-4 flex items-start justify-between gap-4 rounded-xl bg-zinc-50 p-4 shadow-sm transition hover:shadow-md dark:bg-zinc-700"
                     >
                       <a
-                        href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/${post.type}/${post.sequence}`}
+                        href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/posts/${post.sequence}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex gap-4"
