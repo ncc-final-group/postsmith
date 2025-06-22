@@ -186,7 +186,7 @@ export default function ClientRoot({ props }: ClientRootProps) {
                 <>
                   {/* 유저 프로필 정보 */}
                   <div className="flex min-h-[100px] items-center gap-4">
-                    <Link href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/blog/${props.userId}`}>
+                    <Link href={`https://www.${process.env.NEXT_PUBLIC_BASE_URL}/blog`}>
                       <Image
                         src={props.profileImage || '/defaultimage.png'}
                         alt="프로필"
@@ -209,10 +209,7 @@ export default function ClientRoot({ props }: ClientRootProps) {
                         <Link href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/edit`} className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700">
                           글쓰기
                         </Link>
-                        <Link
-                          href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/blog/${props.userId}`}
-                          className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700"
-                        >
+                        <Link href={`https://${props.myBlogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}`} className="py-2 text-center hover:bg-gray-50 dark:hover:bg-zinc-700">
                           내 블로그
                         </Link>
                         <Link
