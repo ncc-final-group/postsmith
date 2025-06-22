@@ -27,6 +27,7 @@ interface Post {
   contentHtml?: string; // 이미지가 없을 때 대체로 쓸 내용
   createdAt: string;
   blogAddress: string;
+  type: string;
   myBlogAddress: string;
   sequence: number;
 }
@@ -131,7 +132,12 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       whileHover={{ scale: 1.05 }}
                       className="relative min-w-[280px] cursor-pointer rounded-xl via-white to-yellow-50 transition-transform dark:from-zinc-700 dark:via-zinc-800 dark:to-zinc-700"
                     >
-                      <a href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/${post.sequence}`} target="_blank" rel="noopener noreferrer" className="block">
+                      <a
+                        href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/${post.type}/${post.sequence}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
                         <figure className="relative h-40 rounded-xl border border-gray-300">
                           <Image src={imageUrl} alt={post.title} fill className="mb-2 w-full rounded-md object-cover" />
                         </figure>
@@ -161,7 +167,12 @@ export default function ClientRoot({ props }: ClientRootProps) {
                       whileHover={{ scale: 1.02 }}
                       className="mb-4 flex items-start justify-between gap-4 rounded-xl bg-zinc-50 p-4 shadow-sm transition hover:shadow-md dark:bg-zinc-700"
                     >
-                      <a href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/${post.sequence}`} target="_blank" rel="noopener noreferrer" className="flex gap-4">
+                      <a
+                        href={`https://${post.blogAddress}.${process.env.NEXT_PUBLIC_BASE_URL}/${post.type}/${post.sequence}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex gap-4"
+                      >
                         <Image src={imageUrl} alt={post.title} width={80} height={80} className="h-20 w-20 rounded-md object-cover" />
                         <div className="flex-1">
                           <div className="mb-1 text-base font-semibold text-gray-900 dark:text-gray-200">{post.title}</div>
